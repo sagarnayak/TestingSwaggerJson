@@ -30,7 +30,6 @@
     "/countries": {
       "parameters": [],
       "get": {
-        "summary": "Get Countries List",
         "tags": [
           "All Countries"
         ],
@@ -71,7 +70,7 @@
     "/login": {
       "parameters": [],
       "post": {
-        "summary": "login with registered account.",
+     
         "tags": [
           "Login"
         ],
@@ -155,7 +154,7 @@
     },
     "/me": {
       "get": {
-        "summary": "Your GET endpoint",
+      
         "tags": [
           "Me"
         ],
@@ -209,7 +208,7 @@
     },
     "/register": {
       "post": {
-        "summary": "Your GET endpoint",
+   
         "tags": [
           "Register"
         ],
@@ -285,7 +284,7 @@
     },
     "/change-password": {
       "post": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "change password"
         ],
@@ -340,7 +339,7 @@
     },
     "/update-preferences": {
       "post": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Update preferences"
         ],
@@ -395,7 +394,7 @@
     },
     "/update-email": {
       "post": {
-        "summary": "Your GET endpoint",
+      
         "tags": [
           "Update email"
         ],
@@ -450,7 +449,7 @@
     },
     "/enable-two-factor-auth": {
       "post": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Enable two factor auth"
         ],
@@ -505,7 +504,7 @@
     },
     "/disable-two-factor-auth": {
       "post": {
-        "summary": "Your GET endpoint",
+    
         "tags": [
           "Disable two factor auth"
         ],
@@ -560,7 +559,7 @@
     },
     "/two-factor-auth": {
       "post": {
-        "summary": "Your GET endpoint",
+   
         "tags": [
           "Two factor auth"
         ],
@@ -615,7 +614,7 @@
     },
     "/change-pin": {
       "post": {
-        "summary": "Your GET endpoint",
+   
         "tags": [
           "Change pin"
         ],
@@ -670,7 +669,7 @@
     },
     "/forgot-pin": {
       "post": {
-        "summary": "Your GET endpoint",
+    
         "tags": [
           "Forgot pin"
         ],
@@ -725,7 +724,7 @@
     },
     "/orders/recent": {
       "get": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Orders recent"
         ],
@@ -773,7 +772,7 @@
     },
     "/orders": {
       "get": {
-        "summary": "Your GET endpoint",
+      
         "tags": [
           "Orders"
         ],
@@ -821,7 +820,7 @@
     },
     "/relationships": {
       "get": {
-        "summary": "Your GET endpoint",
+   
         "tags": [
           "Relationships"
         ],
@@ -862,7 +861,7 @@
     },
     "/recipients/add": {
       "post": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Recipients add"
         ],
@@ -910,7 +909,7 @@
     },
     "/recipients": {
       "get": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Recipients"
         ],
@@ -958,7 +957,7 @@
     },
     "/android/version-check/3": {
       "get": {
-        "summary": "Your GET endpoint",
+    
         "tags": [
           "Version Check"
         ],
@@ -999,7 +998,7 @@
     },
     "/ios/version-check/1": {
       "get": {
-        "summary": "Your GET endpoint",
+   
         "tags": [
           "Version Check"
         ],
@@ -1040,7 +1039,7 @@
     },
     "/resend-email-verification": {
       "post": {
-        "summary": "Your GET endpoint",
+ 
         "tags": [
           "Resend email verification"
         ],
@@ -1088,7 +1087,7 @@
     },
     "/service-types": {
       "get": {
-        "summary": "Your GET endpoint",
+  
         "tags": [
           "Service type"
         ],
@@ -1205,7 +1204,7 @@
     },
     "/quotes": {
       "post": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Quotes"
         ],
@@ -1243,7 +1242,7 @@
     },
     "/settings": {
       "get": {
-        "summary": "Your GET endpoint",
+      
         "tags": [
           "Settings"
         ],
@@ -1284,7 +1283,7 @@
     },
     "/purposes": {
       "get": {
-        "summary": "Your GET endpoint",
+
         "tags": [
           "Puorpose"
         ],
@@ -1325,7 +1324,7 @@
     },
     "/password-policy": {
       "get": {
-        "summary": "Your GET endpoint",
+      
         "tags": [
           "Password policy"
         ],
@@ -1366,7 +1365,7 @@
     },
     "/countries/sources": {
       "get": {
-        "summary": "Your GET endpoint",
+    
         "tags": [
           "Sources"
         ],
@@ -1407,7 +1406,7 @@
     },
     "/countries/destinations": {
       "get": {
-        "summary": "Your GET endpoint",
+    
         "tags": [
           "Destinations"
         ],
