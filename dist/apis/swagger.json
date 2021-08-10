@@ -1,1 +1,2090 @@
-{"swagger":"2.0","info":{"description":"This is a sample server Petstore server from sagar.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.","version":"1.0.5","title":"Swagger Petstore","termsOfService":"http://swagger.io/terms/","contact":{"email":"apiteam@swagger.io"},"license":{"name":"Apache 2.0","url":"http://www.apache.org/licenses/LICENSE-2.0.html"}},"host":"petstore.swagger.io","basePath":"/v2","tags":[{"name":"pet","description":"Everything about your Pets","externalDocs":{"description":"Find out more","url":"http://swagger.io"}},{"name":"store","description":"Access to Petstore orders"},{"name":"user","description":"Operations about user","externalDocs":{"description":"Find out more about our store","url":"http://swagger.io"}}],"schemes":["https","http"],"paths":{"/pet/{petId}/uploadImage":{"post":{"tags":["pet"],"summary":"uploads an image","description":"","operationId":"uploadFile","consumes":["multipart/form-data"],"produces":["application/json"],"parameters":[{"name":"petId","in":"path","description":"ID of pet to update","required":true,"type":"integer","format":"int64"},{"name":"additionalMetadata","in":"formData","description":"Additional data to pass to server","required":false,"type":"string"},{"name":"file","in":"formData","description":"file to upload","required":false,"type":"file"}],"responses":{"200":{"description":"successful operation","schema":{"$ref":"#/definitions/ApiResponse"}}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}},"/pet":{"post":{"tags":["pet"],"summary":"Add a new pet to the store","description":"","operationId":"addPet","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"Pet object that needs to be added to the store","required":true,"schema":{"$ref":"#/definitions/Pet"}}],"responses":{"405":{"description":"Invalid input"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]},"put":{"tags":["pet"],"summary":"Update an existing pet","description":"","operationId":"updatePet","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"Pet object that needs to be added to the store","required":true,"schema":{"$ref":"#/definitions/Pet"}}],"responses":{"400":{"description":"Invalid ID supplied"},"404":{"description":"Pet not found"},"405":{"description":"Validation exception"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}},"/pet/findByStatus":{"get":{"tags":["pet"],"summary":"Finds Pets by status","description":"Multiple status values can be provided with comma separated strings","operationId":"findPetsByStatus","produces":["application/json","application/xml"],"parameters":[{"name":"status","in":"query","description":"Status values that need to be considered for filter","required":true,"type":"array","items":{"type":"string","enum":["available","pending","sold"],"default":"available"},"collectionFormat":"multi"}],"responses":{"200":{"description":"successful operation","schema":{"type":"array","items":{"$ref":"#/definitions/Pet"}}},"400":{"description":"Invalid status value"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}},"/pet/findByTags":{"get":{"tags":["pet"],"summary":"Finds Pets by tags","description":"Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.","operationId":"findPetsByTags","produces":["application/json","application/xml"],"parameters":[{"name":"tags","in":"query","description":"Tags to filter by","required":true,"type":"array","items":{"type":"string"},"collectionFormat":"multi"}],"responses":{"200":{"description":"successful operation","schema":{"type":"array","items":{"$ref":"#/definitions/Pet"}}},"400":{"description":"Invalid tag value"}},"security":[{"petstore_auth":["write:pets","read:pets"]}],"deprecated":true}},"/pet/{petId}":{"get":{"tags":["pet"],"summary":"Find pet by ID","description":"Returns a single pet","operationId":"getPetById","produces":["application/json","application/xml"],"parameters":[{"name":"petId","in":"path","description":"ID of pet to return","required":true,"type":"integer","format":"int64"}],"responses":{"200":{"description":"successful operation","schema":{"$ref":"#/definitions/Pet"}},"400":{"description":"Invalid ID supplied"},"404":{"description":"Pet not found"}},"security":[{"api_key":[]}]},"post":{"tags":["pet"],"summary":"Updates a pet in the store with form data","description":"","operationId":"updatePetWithForm","consumes":["application/x-www-form-urlencoded"],"produces":["application/json","application/xml"],"parameters":[{"name":"petId","in":"path","description":"ID of pet that needs to be updated","required":true,"type":"integer","format":"int64"},{"name":"name","in":"formData","description":"Updated name of the pet","required":false,"type":"string"},{"name":"status","in":"formData","description":"Updated status of the pet","required":false,"type":"string"}],"responses":{"405":{"description":"Invalid input"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]},"delete":{"tags":["pet"],"summary":"Deletes a pet","description":"","operationId":"deletePet","produces":["application/json","application/xml"],"parameters":[{"name":"api_key","in":"header","required":false,"type":"string"},{"name":"petId","in":"path","description":"Pet id to delete","required":true,"type":"integer","format":"int64"}],"responses":{"400":{"description":"Invalid ID supplied"},"404":{"description":"Pet not found"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}},"/store/inventory":{"get":{"tags":["store"],"summary":"Returns pet inventories by status","description":"Returns a map of status codes to quantities","operationId":"getInventory","produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"object","additionalProperties":{"type":"integer","format":"int32"}}}},"security":[{"api_key":[]}]}},"/store/order":{"post":{"tags":["store"],"summary":"Place an order for a pet","description":"","operationId":"placeOrder","consumes":["application/json"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"order placed for purchasing the pet","required":true,"schema":{"$ref":"#/definitions/Order"}}],"responses":{"200":{"description":"successful operation","schema":{"$ref":"#/definitions/Order"}},"400":{"description":"Invalid Order"}}}},"/store/order/{orderId}":{"get":{"tags":["store"],"summary":"Find purchase order by ID","description":"For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions","operationId":"getOrderById","produces":["application/json","application/xml"],"parameters":[{"name":"orderId","in":"path","description":"ID of pet that needs to be fetched","required":true,"type":"integer","maximum":10,"minimum":1,"format":"int64"}],"responses":{"200":{"description":"successful operation","schema":{"$ref":"#/definitions/Order"}},"400":{"description":"Invalid ID supplied"},"404":{"description":"Order not found"}}},"delete":{"tags":["store"],"summary":"Delete purchase order by ID","description":"For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors","operationId":"deleteOrder","produces":["application/json","application/xml"],"parameters":[{"name":"orderId","in":"path","description":"ID of the order that needs to be deleted","required":true,"type":"integer","minimum":1,"format":"int64"}],"responses":{"400":{"description":"Invalid ID supplied"},"404":{"description":"Order not found"}}}},"/user/createWithList":{"post":{"tags":["user"],"summary":"Creates list of users with given input array","description":"","operationId":"createUsersWithListInput","consumes":["application/json"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"List of user object","required":true,"schema":{"type":"array","items":{"$ref":"#/definitions/User"}}}],"responses":{"default":{"description":"successful operation"}}}},"/user/{username}":{"get":{"tags":["user"],"summary":"Get user by user name","description":"","operationId":"getUserByName","produces":["application/json","application/xml"],"parameters":[{"name":"username","in":"path","description":"The name that needs to be fetched. Use user1 for testing. ","required":true,"type":"string"}],"responses":{"200":{"description":"successful operation","schema":{"$ref":"#/definitions/User"}},"400":{"description":"Invalid username supplied"},"404":{"description":"User not found"}}},"put":{"tags":["user"],"summary":"Updated user","description":"This can only be done by the logged in user.","operationId":"updateUser","consumes":["application/json"],"produces":["application/json","application/xml"],"parameters":[{"name":"username","in":"path","description":"name that need to be updated","required":true,"type":"string"},{"in":"body","name":"body","description":"Updated user object","required":true,"schema":{"$ref":"#/definitions/User"}}],"responses":{"400":{"description":"Invalid user supplied"},"404":{"description":"User not found"}}},"delete":{"tags":["user"],"summary":"Delete user","description":"This can only be done by the logged in user.","operationId":"deleteUser","produces":["application/json","application/xml"],"parameters":[{"name":"username","in":"path","description":"The name that needs to be deleted","required":true,"type":"string"}],"responses":{"400":{"description":"Invalid username supplied"},"404":{"description":"User not found"}}}},"/user/login":{"get":{"tags":["user"],"summary":"Logs user into the system","description":"","operationId":"loginUser","produces":["application/json","application/xml"],"parameters":[{"name":"username","in":"query","description":"The user name for login","required":true,"type":"string"},{"name":"password","in":"query","description":"The password for login in clear text","required":true,"type":"string"}],"responses":{"200":{"description":"successful operation","headers":{"X-Expires-After":{"type":"string","format":"date-time","description":"date in UTC when token expires"},"X-Rate-Limit":{"type":"integer","format":"int32","description":"calls per hour allowed by the user"}},"schema":{"type":"string"}},"400":{"description":"Invalid username/password supplied"}}}},"/user/logout":{"get":{"tags":["user"],"summary":"Logs out current logged in user session","description":"","operationId":"logoutUser","produces":["application/json","application/xml"],"parameters":[],"responses":{"default":{"description":"successful operation"}}}},"/user/createWithArray":{"post":{"tags":["user"],"summary":"Creates list of users with given input array","description":"","operationId":"createUsersWithArrayInput","consumes":["application/json"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"List of user object","required":true,"schema":{"type":"array","items":{"$ref":"#/definitions/User"}}}],"responses":{"default":{"description":"successful operation"}}}},"/user":{"post":{"tags":["user"],"summary":"Create user","description":"This can only be done by the logged in user.","operationId":"createUser","consumes":["application/json"],"produces":["application/json","application/xml"],"parameters":[{"in":"body","name":"body","description":"Created user object","required":true,"schema":{"$ref":"#/definitions/User"}}],"responses":{"default":{"description":"successful operation"}}}}},"securityDefinitions":{"api_key":{"type":"apiKey","name":"api_key","in":"header"},"petstore_auth":{"type":"oauth2","authorizationUrl":"https://petstore.swagger.io/oauth/authorize","flow":"implicit","scopes":{"read:pets":"read your pets","write:pets":"modify pets in your account"}}},"definitions":{"ApiResponse":{"type":"object","properties":{"code":{"type":"integer","format":"int32"},"type":{"type":"string"},"message":{"type":"string"}}},"Category":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Category"}},"Pet":{"type":"object","required":["name","photoUrls"],"properties":{"id":{"type":"integer","format":"int64"},"category":{"$ref":"#/definitions/Category"},"name":{"type":"string","example":"doggie"},"photoUrls":{"type":"array","xml":{"wrapped":true},"items":{"type":"string","xml":{"name":"photoUrl"}}},"tags":{"type":"array","xml":{"wrapped":true},"items":{"xml":{"name":"tag"},"$ref":"#/definitions/Tag"}},"status":{"type":"string","description":"pet status in the store","enum":["available","pending","sold"]}},"xml":{"name":"Pet"}},"Tag":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Tag"}},"Order":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"petId":{"type":"integer","format":"int64"},"quantity":{"type":"integer","format":"int32"},"shipDate":{"type":"string","format":"date-time"},"status":{"type":"string","description":"Order Status","enum":["placed","approved","delivered"]},"complete":{"type":"boolean"}},"xml":{"name":"Order"}},"User":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"username":{"type":"string"},"firstName":{"type":"string"},"lastName":{"type":"string"},"email":{"type":"string"},"password":{"type":"string"},"phone":{"type":"string"},"userStatus":{"type":"integer","format":"int32","description":"User Status"}},"xml":{"name":"User"}}},"externalDocs":{"description":"Find out more about Swagger","url":"http://swagger.io"}}
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Remitall APIs",
+    "version": "1.0",
+    "description": "Remitall APIs documentation",
+    "contact": {
+      "name": "sagar nayak"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.staging.remitall.co.uk/client/v1",
+      "description": "Testing"
+    },
+    {
+      "url": "https://api.sarafirani.com/client/v1",
+      "description": "IRFX"
+    },
+    {
+      "url": "https://api.rencamoney.com/client/v1",
+      "description": "RencaMoney"
+    },
+    {
+      "url": "https://api.zeusremit.com/client/v1",
+      "description": "ZeusRemit"
+    }
+  ],
+  "paths": {
+    "/countries": {
+      "parameters": [],
+      "get": {
+        "summary": "Get Countries List",
+        "tags": [
+          "All Countries"
+        ],
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Client-ID"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-Secret"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Country"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "parameters": [],
+      "post": {
+        "summary": "login with registered account.",
+        "tags": [
+          "Login"
+        ],
+        "operationId": "post-login",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Client-ID"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-Secret"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-IP"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-Fingerprint"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-UA"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-FCM"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "email": "sagar@oneolabs.com",
+                    "password": "Qwerty@123"
+                  }
+                },
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "sagar@oneolabs.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "Qwerty@123"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "email": "string",
+                    "password": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Me"
+        ],
+        "operationId": "get-me",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Client-ID"
+          },
+          {
+            "$ref": "#/components/parameters/X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-UA"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Register"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-register",
+        "description": "register your account.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-IP"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Fingerprint"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-UA"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Android-FCM-ID"
+          }
+        ]
+      }
+    },
+    "/change-password": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "change password"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sucess"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-change-password",
+        "description": "change your password.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/update-preferences": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Update preferences"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-update-preferences",
+        "description": "update your preference.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/update-email": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Update email"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sucess"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-update-email",
+        "description": "update your registered email.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/enable-two-factor-auth": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Enable two factor auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-enable-two-factor-auth",
+        "description": "enable two factor auth.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/disable-two-factor-auth": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Disable two factor auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sucess"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-disable-two-factor-auth",
+        "description": "disable two factor auth.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/two-factor-auth": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Two factor auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-two-factor-auth",
+        "description": "create two factor auth.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/change-pin": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Change pin"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-change-pin",
+        "description": "change two factor auth pin",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/forgot-pin": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Forgot pin"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sucess"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-forgot-pin",
+        "description": "request for change password.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/orders/recent": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Orders recent"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-orders-recent",
+        "description": "get recent orders.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Orders"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-orders",
+        "description": "get all recent orders.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/relationships": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Relationships"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-relationships",
+        "description": "get relationship.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/recipients/add": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Recipients add"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-recipients-add",
+        "description": "add recipients.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/recipients": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Recipients"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-recipients",
+        "description": "get recipients.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/android/version-check/3": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Version Check"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-android-version-check-3",
+        "description": "get device info",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/ios/version-check/1": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Version Check"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-ios-version-check-1",
+        "description": "get device info",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/resend-email-verification": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Resend email verification"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-resend-email-verification",
+        "description": "resend verification email.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/service-types": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Service type"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-service-types",
+        "description": "get service type.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-IP"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Fingerprint"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-UA"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-FCM"
+          }
+        ]
+      }
+    },
+    "/orders.xlsx": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Export orders in xlsx"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-orders.xlsx",
+        "description": "get all orders list in xmls sheet.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/quotes": {
+      "post": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Quotes"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          }
+        },
+        "operationId": "get-quotes",
+        "description": "add quote",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-User-Token"
+          }
+        ]
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-settings",
+        "description": "get settings.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/purposes": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Puorpose"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-purposes",
+        "description": "get the pourpose of transction.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/password-policy": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Password policy"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-password-policy",
+        "description": "get the password policy.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/countries/sources": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Sources"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-countries-sources",
+        "description": "get the source.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    },
+    "/countries/destinations": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Destinations"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of blog posts in JSON format"
+          },
+          "401": {
+            "description": "An array of blog posts in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-countries-destinations",
+        "description": "get the destination.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-ID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Client-Secret"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Country": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "known_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "official_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "endonym": {
+            "type": "string",
+            "minLength": 1
+          },
+          "demonym": {
+            "type": "string",
+            "minLength": 1
+          },
+          "isd_code": {
+            "type": "number"
+          },
+          "iso_code_alpha2": {
+            "type": "string",
+            "minLength": 1
+          },
+          "iso_code_alpha3": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fips_code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nationality": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "known_name",
+          "official_name",
+          "endonym",
+          "demonym",
+          "isd_code",
+          "iso_code_alpha2",
+          "iso_code_alpha3",
+          "fips_code",
+          "slug",
+          "nationality"
+        ],
+        "x-examples": {
+          "example-1": {
+            "id": "5a6f1d7a-614a-45a2-86b9-85a52c3175f0",
+            "known_name": "Afghanistan",
+            "official_name": "Afghanistan",
+            "endonym": "افغانستان",
+            "demonym": "Afghan",
+            "isd_code": 93,
+            "iso_code_alpha2": "AF",
+            "iso_code_alpha3": "AFG",
+            "fips_code": "AF",
+            "slug": "afghanistan",
+            "nationality": "Afghan, Afghanistan"
+          }
+        }
+      },
+      "DocumentCategory": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "is_business_category": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "is_business_category",
+          "code"
+        ],
+        "x-examples": {
+          "example-1": {
+            "id": "70a81a87-1463-481b-abb6-84182683b572",
+            "title": "Proof of Identity",
+            "is_business_category": false,
+            "code": "POI"
+          }
+        }
+      },
+      "DocumentType": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "code"
+        ],
+        "x-examples": {
+          "example-1": {
+            "id": "f002e8e5-1aa1-40bf-b677-6ad246c0dcb1",
+            "title": "Passport",
+            "code": "PASSPORT"
+          }
+        }
+      },
+      "Document": {
+        "description": "",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "category": {
+              "id": "70a81a87-1463-481b-abb6-84182683b572",
+              "title": "Proof of Identity",
+              "is_business_category": false,
+              "code": "POI"
+            },
+            "document_number": null,
+            "issuer": null,
+            "place_of_issue": null,
+            "issuing_country_id": null,
+            "valid_from": null,
+            "valid_through": null,
+            "uploaded": "2021-06-03T18:39:42+00:00",
+            "status": "processing",
+            "document_type": {
+              "id": "f002e8e5-1aa1-40bf-b677-6ad246c0dcb1",
+              "title": "Passport",
+              "code": "PASSPORT"
+            }
+          }
+        },
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/DocumentCategory"
+          },
+          "document_number": {},
+          "issuer": {},
+          "place_of_issue": {},
+          "issuing_country_id": {},
+          "valid_from": {},
+          "valid_through": {},
+          "uploaded": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "document_type": {
+            "$ref": "#/components/schemas/DocumentType"
+          }
+        },
+        "required": [
+          "category",
+          "uploaded",
+          "status",
+          "document_type"
+        ]
+      },
+      "Profile": {
+        "title": "profileType",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "country_id": {
+            "type": "string"
+          },
+          "cin": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "middle_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "email_unmasked": {
+            "type": "string"
+          },
+          "is_verified_email": {
+            "type": "string"
+          },
+          "two_factor_enabled": {
+            "type": "string"
+          },
+          "password_modified": {
+            "type": "string"
+          },
+          "referral_code": {
+            "type": "string"
+          },
+          "is_profile_completed": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "timezone_nice": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          },
+          "suspended": {
+            "type": "boolean"
+          },
+          "devices": {
+            "$ref": "#/components/schemas/Device"
+          },
+          "last_login": {
+            "$ref": "#/components/schemas/LastLogin"
+          },
+          "sections": {
+            "$ref": "#/components/schemas/Section"
+          },
+          "documents": {
+            "$ref": "#/components/schemas/Document"
+          }
+        }
+      },
+      "Device": {
+        "title": "Device",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "client": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "is_mobile": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "string"
+          },
+          "last_used": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          }
+        }
+      },
+      "TimeZone": {
+        "title": "TimeZone",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "string"
+          },
+          "nice": {
+            "type": "string"
+          }
+        }
+      },
+      "LastLogin": {
+        "title": "LastLogin",
+        "type": "object",
+        "properties": {
+          "ip_address": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "string"
+          },
+          "lng": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          }
+        }
+      },
+      "Section": {
+        "title": "Section",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "is_business": {
+            "type": "boolean"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/Property_"
+          },
+          "guarded": {}
+        }
+      },
+      "Property_": {
+        "title": "Property",
+        "type": "object",
+        "properties": {
+          "property": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "hint": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "other": {
+            "type": "boolean"
+          },
+          "expression": {
+            "type": "string"
+          },
+          "expression_error": {
+            "type": "string"
+          },
+          "mask": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SectionPropertyType"
+          },
+          "options": {
+            "$ref": "#/components/schemas/SelectOption"
+          },
+          "value": {
+            "type": "object"
+          },
+          "editable": {
+            "type": "boolean"
+          },
+          "prefix_isd": {
+            "type": "boolean"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          }
+        },
+        "x-internal": false
+      },
+      "SelectOption": {
+        "title": "SelectOption",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "SectionPropertyType": {
+        "title": "SectionPropertyType",
+        "type": "object"
+      },
+      "Error": {
+        "title": "Error",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Sucess": {
+        "title": "Sucess",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "X-User-Token": {
+        "name": "X-User-Token",
+        "type": "apiKey",
+        "in": "header"
+      }
+    },
+    "parameters": {
+      "X-Client-ID": {
+        "name": "X-Client-ID",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "7a030ac3-6784-44af-af77-8b8b36cdc6c6"
+        },
+        "description": "Client Id"
+      },
+      "X-Client-Secret": {
+        "name": "X-Client-Secret",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "or3H7mh1k66R2S749jDx449UJXrj1Mp0GH29DjAwEKe7h1fK"
+        },
+        "description": "Client Secret"
+      },
+      "X-Client-IP": {
+        "name": "X-Client-IP",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "110.227.99.214"
+        },
+        "description": "X-Client-IP"
+      },
+      "X-Client-Fingerprint": {
+        "name": "X-Client-Fingerprint",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "ac7d0510-1edc-4645-8ac4-cb7bc204756e"
+        },
+        "description": "X-Client-Fingerprint"
+      },
+      "X-Client-UA": {
+        "name": "X-Client-UA",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "Native App 1.0;iOS 14;Apple;iPhone 7;true"
+        },
+        "description": "X-Client-UA"
+      },
+      "X-Client-FCM": {
+        "name": "X-Client-FCM",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "sfjvhgsf8v67sf98v7saf8v7as90f8v7"
+        },
+        "description": "X-Client-FCM"
+      }
+    },
+    "responses": {
+      "AllCountries": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "x-examples": {
+                "example-1": {
+                  "code": 200,
+                  "message": "Success",
+                  "countries": [
+                    {
+                      "id": "5a6f1d7a-614a-45a2-86b9-85a52c3175f0",
+                      "known_name": "Afghanistan",
+                      "official_name": "Afghanistan",
+                      "endonym": "افغانستان",
+                      "demonym": "Afghan",
+                      "isd_code": 93,
+                      "iso_code_alpha2": "AF",
+                      "iso_code_alpha3": "AFG",
+                      "fips_code": "AF",
+                      "slug": "afghanistan",
+                      "nationality": "Afghan, Afghanistan"
+                    },
+                    {
+                      "id": "9a09de2f-7949-4e7c-9a1b-ec5344a92d02",
+                      "known_name": "Åland",
+                      "official_name": "Åland Islands",
+                      "endonym": "Åland",
+                      "demonym": "Ålandish",
+                      "isd_code": 358,
+                      "iso_code_alpha2": "AX",
+                      "iso_code_alpha3": "ALA",
+                      "fips_code": null,
+                      "slug": "aland",
+                      "nationality": "Ålandish, Åland"
+                    }
+                  ]
+                }
+              },
+              "properties": {
+                "code": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "countries": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/components/schemas/Country"
+                  }
+                }
+              },
+              "required": [
+                "code",
+                "message",
+                "countries"
+              ]
+            },
+            "examples": {
+              "example-1": {
+                "value": {
+                  "code": 0,
+                  "message": "string",
+                  "countries": [
+                    {
+                      "id": "string",
+                      "known_name": "string",
+                      "official_name": "string",
+                      "endonym": "string",
+                      "demonym": "string",
+                      "isd_code": 0,
+                      "iso_code_alpha2": "string",
+                      "iso_code_alpha3": "string",
+                      "fips_code": "string",
+                      "slug": "string",
+                      "nationality": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "X-User-Token": []
+    }
+  ]
+}
